@@ -1,5 +1,9 @@
 package Lists;
 
+/**
+ * ArrayUnorderedListADT defines the interface to an unordered list collection
+ * @param <T> the type of elements held in this collection
+ */
 public interface ArrayUnorderedListADT<T> extends ListADT<T> {
     /**
      * Adds the specified element to the front of this list

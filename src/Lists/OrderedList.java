@@ -1,7 +1,16 @@
 package Lists;
 
+/**
+ * OrderedList represents a linked implementation of an ordered list.
+ * @param <T> the type of elements held in this collection
+ */
 public class OrderedList<T> extends LinkedList<T> implements OrderedListADT<T> {
 
+    /**
+     * Creates an empty list using the default capacity.
+     *
+     * @param element the element to be added to this list
+     */
     @Override
     public void add(T element) {
         if (!(element instanceof Comparable)) {

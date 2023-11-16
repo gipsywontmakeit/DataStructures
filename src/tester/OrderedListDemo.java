@@ -2,6 +2,8 @@ package tester;
 
 import Lists.OrderedList;
 
+import java.util.Iterator;
+
 public class OrderedListDemo {
     public static void main(String[] args) {
         OrderedList<Integer> list = new OrderedList<>();
@@ -24,5 +26,12 @@ public class OrderedListDemo {
         System.out.println("Remove first: " + list.removeFirst());
         System.out.println("Remove last: " + list.removeLast());
         System.out.println(list);
+
+        System.out.println("Iterator");
+        Iterator<Integer> iterator = list.iterator();
+        while (iterator.hasNext()) {
+            System.out.print(iterator.next() + " ");
+        }
+
     }
 }

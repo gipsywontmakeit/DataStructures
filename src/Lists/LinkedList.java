@@ -74,6 +74,10 @@ public abstract class LinkedList<T> implements ListADT<T> {
          */
         private int expectedModCount;
 
+        /**
+         * Sets up this iterator using the specified items.
+         * @param modCount the current modification count for the list
+         */
         public LinkedIterator(int modCount) {
             this.expectedModCount = modCount;
             this.current = front;
@@ -280,11 +284,19 @@ public abstract class LinkedList<T> implements ListADT<T> {
         return count;
     }
 
+    /**
+     * Returns an iterator for the elements in this list.
+     * @return an iterator over the elements in this list
+     */
     @Override
     public Iterator<T> iterator() {
         return new LinkedIterator(modCount);
     }
 
+    /**
+     * Returns a string representation of this list.
+     * @return a string representation of this list
+     */
     @Override
     public String toString() {
         StringBuilder result = new StringBuilder();

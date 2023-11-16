@@ -1,6 +1,15 @@
 package Lists;
 
+/**
+ * UnorderedList represents a singly linked implementation of an unordered list.
+ * @param <T> the type of elements held in this collection
+ */
 public class UnorderedList<T> extends LinkedList<T> implements UnorderedListADT<T>{
+
+    /**
+     * Creates an empty list using the default capacity.
+     * @param element the element to be added to the front of this list
+     */
     @Override
     public void addToFront(T element) {
         LinearNode<T> node = new LinearNode<>(element);
@@ -15,6 +24,11 @@ public class UnorderedList<T> extends LinkedList<T> implements UnorderedListADT<
         modCount++;
     }
 
+
+    /**
+     * Creates an empty list using the default capacity.
+     * @param element the element to be added to the rear of this list
+     */
     @Override
     public void addToRear(T element) {
         LinearNode<T> node = new LinearNode<>(element);
@@ -29,6 +43,11 @@ public class UnorderedList<T> extends LinkedList<T> implements UnorderedListADT<
         modCount++;
     }
 
+    /**
+     * Creates an empty list using the default capacity.
+     * @param element the element to be added after the target
+     * @param target the target is the item that the element will be added after
+     */
     @Override
     public void addAfter(T element, T target) {
         LinearNode<T> node = new LinearNode<>(element);
