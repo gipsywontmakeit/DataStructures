@@ -3,7 +3,7 @@ package Stack;
 import exceptions.EmptyCollectionException;
 
 /**
- * LinkedStack represents a linked implementation of a stack
+ * Array stack represents an array implementation of a stack.
  */
 public class ArrayStack<T> implements StackADT<T> {
 

@@ -7,8 +7,7 @@ package Lists;
 public class DoubleOrderedList<T> extends DoubleLinkedList<T> implements DoubleOrderedListADT<T>{
 
     /**
-     * Creates an empty list using the default capacity.
-     *
+     * The method adds the specified element to this list at the proper location
      * @param element the element to be added to this list
      */
     @Override
