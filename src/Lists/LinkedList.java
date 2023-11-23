@@ -22,7 +22,7 @@ public abstract class LinkedList<T> implements ListADT<T> {
     /**
      * Reference to the first element of this list.
      */
-    LinearNode<T> front;
+    public LinearNode<T> front;
 
     /**
      * Reference to the last element of this list.

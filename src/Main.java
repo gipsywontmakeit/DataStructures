@@ -1,4 +1,5 @@
 import LinkedList.BasicLinkedList;
+import Lists.ArrayOrderedList;
 import Lists.LinkedList;
 import Lists.OrderedList;
 import Queue.CircularArrayQueue;
@@ -6,6 +7,8 @@ import Queue.LinkedQueue;
 import Stack.ArrayStack;
 import Stack.LinkedStack;
 import demos.ArrayPostFix;
+
+import java.util.Iterator;
 
 // Press Shift twice to open the Search Everywhere dialog and type `show whitespaces`,
 // then press Enter. You can now see whitespace characters in your code.
@@ -18,6 +21,7 @@ public class Main {
         LinkedQueue<Integer> linkedQueue = new LinkedQueue<>();
         CircularArrayQueue<String> circularArrayQueue = new CircularArrayQueue<>(3);
         OrderedList<Integer> orderedList = new OrderedList<>();
+        ArrayOrderedList<Integer> arrayOrderedList = new ArrayOrderedList<>();
 
         System.out.println("Linked List: ");
         linkedList.add(1);
@@ -93,8 +97,20 @@ public class Main {
         orderedList.add(2);
         orderedList.add(3);
         orderedList.add(1);
-        orderedList.toString();
+        Iterator<Integer> iterator = orderedList.iterator();
+        while(iterator.hasNext()) {
+            System.out.println(iterator.next() + " ");
+        }
 
+        System.out.println("\nArray Ordered List");
+        arrayOrderedList.add(5);
+        arrayOrderedList.add(2);
+        arrayOrderedList.add(3);
+        arrayOrderedList.add(1);
+        Iterator<Integer> iterator2 = arrayOrderedList.iterator();
+        while(iterator2.hasNext()) {
+            System.out.println(iterator2.next() + " ");
+        }
 
 
 

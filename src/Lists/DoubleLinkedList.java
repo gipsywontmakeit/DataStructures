@@ -20,12 +20,12 @@ public abstract class DoubleLinkedList<T> implements ListADT<T> {
     /**
      * Reference to the first element of this list.
      */
-    DoubleNode<T> front;
+    public DoubleNode<T> front;
 
     /**
      * Reference to the last element of this list.
      */
-    DoubleNode<T> rear;
+    public DoubleNode<T> rear;
 
     /**
      * The number of modifications to this list.
