@@ -1,0 +1,1 @@
+packageSearchIndex = [{"l":"Algorithms"},{"l":"Algorithms.demos"},{"l":"All Packages","u":"allpackages-index.html"},{"l":"exceptions"},{"l":"Graphs"},{"l":"Lists"},{"l":"Queue"},{"l":"Stack"},{"l":"tester"},{"l":"tester.demos"},{"l":"Trees"},{"l":"Trees.Heaps"}];updateSearchResults();

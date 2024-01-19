@@ -20,12 +20,12 @@ public class ArrayBinaryTree<T> implements BinaryTreeADT<T> {
     /**
      * The number of elements in the tree
      */
-    private int count;
+    protected int count;
 
     /**
      * The tree
      */
-    private T[] tree;
+    protected T[] tree;
 
     /**
      * Creates an empty binary tree
@@ -103,14 +103,14 @@ public class ArrayBinaryTree<T> implements BinaryTreeADT<T> {
         boolean found = false;
         T result = null;
 
-        for(int i = 0; i < this.size(); i++) {
-            if(targetElement.equals(this.tree[i])) {
+        for (int i = 0; i < this.size(); i++) {
+            if (targetElement.equals(this.tree[i])) {
                 found = true;
                 result = this.tree[i];
             }
         }
 
-        if(!found) {
+        if (!found) {
             throw new ElementNotFoundException("The element was not found in the tree");
         }
 
@@ -119,11 +119,12 @@ public class ArrayBinaryTree<T> implements BinaryTreeADT<T> {
 
     /**
      * Performs an inorder traversal on this binary tree by calling an overloaded, recursive inorder method that starts with the root
+     *
      * @param node the node to be used as the root for this traversal
      * @param iter the iterator to use for the traversal
      */
     protected void inorder(int node, Iterator<T> iter) {
-        if(node < this.size()) {
+        if (node < this.size()) {
             this.inorder(node * 2 + 1, iter);
             iter.next();
             this.inorder(node * 2 + 2, iter);
@@ -132,11 +133,12 @@ public class ArrayBinaryTree<T> implements BinaryTreeADT<T> {
 
     /**
      * Performs a preorder traversal on this binary tree by calling an overloaded, recursive preorder method that starts with the root
+     *
      * @param node the node to be used as the root for this traversal
      * @param iter the iterator to use for the traversal
      */
     protected void preorder(int node, Iterator<T> iter) {
-        if(node < this.size()) {
+        if (node < this.size()) {
             iter.next();
             this.preorder(node * 2 + 1, iter);
             this.preorder(node * 2 + 2, iter);
@@ -145,11 +147,12 @@ public class ArrayBinaryTree<T> implements BinaryTreeADT<T> {
 
     /**
      * Performs a postorder traversal on this binary tree by calling an overloaded, recursive postorder method that starts with the root
+     *
      * @param node the node to be used as the root for this traversal
      * @param iter the iterator to use for the traversal
      */
     protected void postorder(int node, Iterator<T> iter) {
-        if(node < this.size()) {
+        if (node < this.size()) {
             this.postorder(node * 2 + 1, iter);
             this.postorder(node * 2 + 2, iter);
             iter.next();
@@ -158,22 +161,31 @@ public class ArrayBinaryTree<T> implements BinaryTreeADT<T> {
 
     /**
      * Performs a levelorder traversal on this binary tree, using a queue
-     * @param node the node to be used as the root for this traversal
+     *
+     * @param node     the node to be used as the root for this traversal
      * @param tempList the temporary list for use in this traversal
      */
     protected void levelorder(int node, ArrayUnorderedList<T> tempList) {
-       if(node < this.size() && this.tree[node] != null) {
-           LinkedQueue<T> queue = new LinkedQueue<>();
-           queue.enqueue(this.tree[node]);
+        if (node < this.size() && this.tree[node] != null) {
+            LinkedQueue<Integer> queue = new LinkedQueue<>();
+            queue.enqueue(node);
 
-           while(!queue.isEmpty()) {
-               T current = queue.dequeue();
-               tempList.addToRear(current);
+            while (!queue.isEmpty()) {
+                int current = queue.dequeue();
+                tempList.addToRear(this.tree[current]);
 
-               levelorder(node * 2 + 1, tempList);
-                levelorder((node + 1) * 2, tempList);
-           }
-       }
+                int leftChild = current * 2 + 1;
+                int rightChild = current * 2 + 2; // Fix this line
+
+                if (leftChild < this.size() && this.tree[leftChild] != null) {
+                    queue.enqueue(leftChild);
+                }
+
+                if (rightChild < this.size() && this.tree[rightChild] != null) {
+                    queue.enqueue(rightChild);
+                }
+            }
+        }
     }
 
     /**
@@ -222,5 +234,13 @@ public class ArrayBinaryTree<T> implements BinaryTreeADT<T> {
         ArrayUnorderedList<T> tempList = new ArrayUnorderedList<>();
         this.levelorder(0, tempList);
         return tempList.iterator();
+    }
+
+    protected void expandCapacity() {
+        T[] temp = (T[]) new Object[tree.length * 2];
+        for (int ct = 0; ct < tree.length; ct++)
+            temp[ct] = tree[ct];
+        tree = temp;
+
     }
 }

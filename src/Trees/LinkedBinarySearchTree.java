@@ -1,6 +1,7 @@
 package Trees;
 
 import exceptions.ElementNotFoundException;
+import exceptions.EmptyCollectionException;
 
 public class LinkedBinarySearchTree<T> extends LinkedBinaryTree<T> implements BinarySearchTreeADT<T> {
 
@@ -27,112 +28,128 @@ public class LinkedBinarySearchTree<T> extends LinkedBinaryTree<T> implements Bi
      */
     @Override
     public void addElement(T element) {
-        BinaryTreeNode<T> node = new BinaryTreeNode<>(element);
+        BinaryTreeNode<T> temp = new BinaryTreeNode<T>(element);
         Comparable<T> comparableElement = (Comparable<T>) element;
 
-        if(isEmpty()) {
-            super.root = node;
-            return;
-        }
+        if (isEmpty())
+            root = temp;
+        else {
+            BinaryTreeNode<T> current = root;
+            boolean added = false;
 
-        BinaryTreeNode<T> current = super.root;
-        boolean added = false;
-
-        while(!added) {
-            // If the element is less than the current element, go left
-            if(comparableElement.compareTo(current.element) < 0) {
-                if(current.left == null) {
-                    current.left = node;
-                    added = true;
+            while (!added) {
+                if (comparableElement.compareTo(current.element) < 0) {
+                    if (current.left == null) {
+                        current.left = temp;
+                        added = true;
+                    } else
+                        current = current.left;
                 } else {
-                    current = current.left;
-                }
-                // If the element is greater than the current element, go right
-            } else {
-                if(current.right == null) {
-                    current.right = node;
-                    added = true;
-                } else {
-                    current = current.right;
+                    if (current.right == null) {
+                        current.right = temp;
+                        added = true;
+                    } else
+                        current = current.right;
                 }
             }
         }
-        super.count++;
+        count++;
     }
 
     /**
-     * Removes and returns the specified element from this tree
+     * Removes the first element that matches the specified target
+     * element from the binary search tree and returns a reference to
+     * it. Throws a ElementNotFoundException if the specified target
+     * element is not found in this tree.
      *
-     * @param targetElement the element to be removed from this tree
-     * @return the element removed from this tree
-     * @throws ElementNotFoundException if the specified element is not found in this tree
+     * @param   targetElement the element to be removed from this tree
+     * @return  the element removed from this tree
+     * @throws  ElementNotFoundException if the specified element is not found in this tree
      */
     @Override
     public T removeElement(T targetElement) throws ElementNotFoundException {
+
         T result = null;
 
-        if(isEmpty()) {
-            throw new ElementNotFoundException("LinkedBinarySearchTree");
-        } else {
-            BinaryTreeNode<T> parent = null;
-            if(((Comparable<T>) targetElement).equals(root.element)) {
+        if (!isEmpty()) {
+            if (((Comparable) targetElement).equals(root.element)) {
                 result = root.element;
-                BinaryTreeNode<T> temp = replacement(root);
-                if(temp == null) {
-                    root = null;
-                } else {
-                    root.element = temp.element;
-                    root.right = temp.right;
-                    root.left = temp.left;
-                }
-                super.count--;
+                root = replacement(root);
+                count--;
             } else {
-                parent = root;
-                if(((Comparable) targetElement).compareTo(root.element) < 0) {
-                    result = removeElement(targetElement, root.left, parent);
-                } else {
-                    result = removeElement(targetElement, root.right, parent);
+                BinaryTreeNode<T> current, parent = root;
+                boolean found = false;
+
+                if (((Comparable) targetElement).compareTo(root.element) < 0)
+                    current = root.left;
+                else
+                    current = root.right;
+
+                while (current != null && !found) {
+                    if (targetElement.equals(current.element)) {
+                        found = true;
+                        count--;
+                        result = current.element;
+
+                        if (current == parent.left)
+                            parent.left = replacement(current);
+                        else
+                            parent.right = replacement(current);
+                    } else {
+                        parent = current;
+
+                        if (((Comparable) targetElement).compareTo(current.element) < 0)
+                            current = current.left;
+                        else
+                            current = current.right;
+                    }
                 }
+                if (!found)
+                    throw new ElementNotFoundException("binary search tree");
             }
         }
-
         return result;
+
     }
 
     /**
-     * Removes the node with the least value from the binary search tree
-     * @param node the node to be removed
-     * @return the node removed from the binary search tree
+     * Returns a reference to a node that will replace the one
+     * specified for removal. In the case where the removed node has
+     * two children, the inorder successor is used as its replacement.
+     *
+     * @param   current the node to be removeed
+     * @return  a reference to the replacing node
      */
-    protected BinaryTreeNode<T> replacement(BinaryTreeNode<T> node) {
+    protected BinaryTreeNode<T> replacement(BinaryTreeNode<T> current) {
         BinaryTreeNode<T> result = null;
 
-        if((node.left == null) && (node.right == null)) {
+        if ((current.left == null) && (current.right == null))
             result = null;
-        } else if((node.left != null) && (node.right == null)) {
-            result = node.left;
-        } else if((node.left == null) && (node.right != null)) {
-            result = node.right;
-        } else {
-            BinaryTreeNode<T> current = node.right;
-            BinaryTreeNode<T> parent = node;
+        else if ((current.left != null) && (current.right == null))
+            result = current.left;
+        else if ((current.left == null) && (current.right != null))
+            result = current.right;
+        else {
+            BinaryTreeNode<T> temp = current.right;
+            BinaryTreeNode<T> parent = current;
 
-            while(current.left != null) {
-                parent = current;
-                current = current.left;
+            while (temp.left != null) {
+                parent = temp;
+                temp = temp.left;
             }
 
-            current.left = node.left;
-            if(node.right != current) {
-                parent.left = current.right;
-                current.right = node.right;
+            if (current.right == temp)
+                temp.left = current.left;
+            else {
+                parent.left = temp.right;
+                temp.right = current.right;
+                temp.left = current.left;
             }
-
-            result = current;
+            result = temp;
         }
-
         return result;
     }
+
     /**
      * Removes all occurrences of the specified element from this tree
      *
@@ -141,7 +158,16 @@ public class LinkedBinarySearchTree<T> extends LinkedBinaryTree<T> implements Bi
      */
     @Override
     public void removeAllOccurrences(T targetElement) throws ElementNotFoundException {
+        removeElement(targetElement);
 
+        boolean occur = true;
+        while(occur) {
+            try {
+                removeElement(targetElement);
+            } catch(ElementNotFoundException e) {
+                occur = false;
+            }
+        }
     }
 
     /**
@@ -151,7 +177,26 @@ public class LinkedBinarySearchTree<T> extends LinkedBinaryTree<T> implements Bi
      */
     @Override
     public T removeMin() {
-        return null;
+        BinaryTreeNode<T> current = root;
+        BinaryTreeNode<T> parent = null;
+
+        while(current.left != null) {
+            parent = current;
+            current = current.left;
+        }
+
+        if(current == root) {
+            root = root.right;
+            return current.element;
+        }
+        //if it's a leaf
+        if(current.right == null) {
+            parent.left = null;
+            return current.element;
+        }
+        //internal node
+        parent.left = current.right;
+        return current.element;
     }
 
     /**
@@ -161,7 +206,30 @@ public class LinkedBinarySearchTree<T> extends LinkedBinaryTree<T> implements Bi
      */
     @Override
     public T removeMax() {
-        return null;
+        T result = null;
+
+        if(isEmpty()) {
+            throw new EmptyCollectionException("The tree is empty");
+        } else {
+            if(root.right == null) {
+                result = root.element;
+                root = root.left;
+            } else {
+                BinaryTreeNode<T> parent = root;
+                BinaryTreeNode<T> current = root.right;
+
+                while(current.right != null) {
+                    parent = current;
+                    current = current.right;
+                }
+
+                result = current.element;
+                parent.right = current.left;
+            }
+
+            count--;
+        }
+        return result;
     }
 
     /**
@@ -170,8 +238,21 @@ public class LinkedBinarySearchTree<T> extends LinkedBinaryTree<T> implements Bi
      * @return a reference to the smallest element in this tree
      */
     @Override
-    public T findMin() {
-        return null;
+    public T findMin() throws EmptyCollectionException {
+        T result = null;
+
+        if(isEmpty()) {
+            throw new EmptyCollectionException("The tree is empty");
+        } else {
+            BinaryTreeNode<T> current = root;
+
+            while(current.left != null) {
+                current = current.left;
+            }
+
+            result = current.element;
+        }
+        return result;
     }
 
     /**
@@ -181,6 +262,19 @@ public class LinkedBinarySearchTree<T> extends LinkedBinaryTree<T> implements Bi
      */
     @Override
     public T findMax() {
-        return null;
+        T result = null;
+
+        if(isEmpty()) {
+            throw new EmptyCollectionException("The tree is empty");
+        } else {
+            BinaryTreeNode<T> current = root;
+
+            while(current.right != null) {
+                current = current.right;
+            }
+
+            result = current.element;
+        }
+        return result;
     }
 }
